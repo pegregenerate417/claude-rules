@@ -119,7 +119,7 @@ cat base/core.md base/git.md languages/typescript.md frameworks/vue.md > CLAUDE.
 |------|---------|
 | Claude Code | `CLAUDE.md` |
 | Cursor | `.cursorrules` 或 `.cursor/rules/*.mdc` |
-| Windsurf | `.windsurfrules` |
+| Antigravity | `.antigravity/rules.md` |
 | GitHub Copilot | `.github/copilot-instructions.md` |
 
 ## 规范设计原则

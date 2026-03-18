@@ -125,7 +125,7 @@ The rules are plain Markdown and work with any AI coding tool. Just place the ou
 |------|-------------|
 | Claude Code | `CLAUDE.md` |
 | Cursor | `.cursorrules` or `.cursor/rules/*.mdc` |
-| Windsurf | `.windsurfrules` |
+| Antigravity | `.antigravity/rules.md` |
 | GitHub Copilot | `.github/copilot-instructions.md` |
 
 ## Design Principles
