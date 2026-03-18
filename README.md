@@ -60,12 +60,13 @@ claude-rules/
 
 ## Usage
 
-### Quick Start (Claude Code Skill)
+### Quick Start (Claude Code Plugin)
 
-Install the skill:
+Add the marketplace and install the plugin:
 
 ```bash
-claude install-skill https://github.com/lifedever/claude-rules/releases/download/v1.0/claude-rules-init.skill
+claude plugin marketplace add lifedever/claude-rules
+claude plugin install claude-rules-init@claude-rules
 ```
 
 Then in any project, just say:
@@ -74,7 +75,13 @@ Then in any project, just say:
 init rules
 ```
 
-The skill will auto-detect your tech stack, fetch the latest rules from this repo, and generate the rules file for you.
+The plugin will auto-detect your tech stack, fetch the latest rules from this repo, and generate `CLAUDE.md` for you.
+
+To update rules in the future:
+
+```bash
+claude plugin marketplace update claude-rules
+```
 
 ### Manual Usage
 

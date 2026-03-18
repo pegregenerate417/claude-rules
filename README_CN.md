@@ -57,12 +57,13 @@ claude-rules/
 
 ## 使用方式
 
-### 快速开始（Claude Code Skill）
+### 快速开始（Claude Code 插件）
 
-安装 Skill：
+添加 marketplace 并安装插件：
 
 ```bash
-claude install-skill https://github.com/lifedever/claude-rules/releases/download/v1.0/claude-rules-init.skill
+claude plugin marketplace add lifedever/claude-rules
+claude plugin install claude-rules-init@claude-rules
 ```
 
 然后在任意项目里说：
@@ -71,7 +72,13 @@ claude install-skill https://github.com/lifedever/claude-rules/releases/download
 init rules
 ```
 
-Skill 会自动检测技术栈，从本仓库拉取最新规范，生成规则文件。
+插件会自动检测技术栈，从本仓库拉取最新规范，生成 `CLAUDE.md`。
+
+更新规范时：
+
+```bash
+claude plugin marketplace update claude-rules
+```
 
 ### 手动使用
 
