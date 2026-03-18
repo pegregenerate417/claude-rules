@@ -75,16 +75,6 @@ cat base/core.md base/git.md languages/swift.md frameworks/swiftui.md > /path/to
 cat base/core.md base/git.md languages/kotlin.md frameworks/springboot.md > /path/to/your-project/CLAUDE.md
 ```
 
-## 与 Cursor Rules 的区别
-
-| 对比项 | Cursor Rules (.mdc) | Claude Rules (.md) |
-|--------|---------------------|---------------------|
-| 适用工具 | Cursor IDE | Claude Code CLI / IDE |
-| 文件格式 | .mdc + frontmatter | 纯 Markdown |
-| 加载方式 | IDE 自动按 glob 匹配 | 拼接为单个 CLAUDE.md |
-| 核心理念 | 遵循项目既有风格 | **打破旧代码坏习惯** |
-| 规则风格 | "使用适当的 XX" | 具体指令 + 禁止/正确示例 |
-
 ## 规范设计原则
 
 1. **可执行**：每条规则 AI 能直接执行，不含模糊表述
