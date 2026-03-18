@@ -1,30 +1,30 @@
-# React 规范
+# React Guidelines
 
-## 组件基本规则
+## Basic Component Rules
 
-- 只用函数组件，禁止 class 组件
-- 单个组件文件不超过 200 行
-- 组件只负责 UI，业务逻辑提取到自定义 hook
-- JSX 中禁止复杂表达式，提取为变量或函数
-- 一个文件只导出一个组件（小型辅助组件除外）
+- Use only function components; class components are forbidden
+- A single component file must not exceed 200 lines
+- Components are responsible only for UI; extract business logic into custom hooks
+- Complex expressions in JSX are forbidden; extract them into variables or functions
+- A file should export only one component (except small helper components)
 
-## 状态管理
+## State Management
 
-- 组件本地状态用 `useState`
-- 复杂状态逻辑用 `useReducer`
-- 状态放在最近的使用者，不要无谓上提
-- 跨组件共享用 Context（少量全局状态）或 Zustand/Jotai（复杂场景）
-- 禁止 prop drilling 超过 2 层
+- Use `useState` for component-local state
+- Use `useReducer` for complex state logic
+- Keep state as close to where it is used as possible; do not lift state unnecessarily
+- Use Context (for small amounts of global state) or Zustand/Jotai (for complex scenarios) for cross-component sharing
+- Prop drilling beyond 2 levels is forbidden
 
 ```tsx
-// 禁止：prop drilling
+// Forbidden: prop drilling
 <GrandParent user={user}>
   <Parent user={user}>
-    <Child user={user} />  // 3 层了
+    <Child user={user} />  // 3 levels deep
   </Parent>
 </GrandParent>
 
-// 正确：Context
+// Correct: Context
 const UserContext = createContext<User | null>(null)
 const useUser = () => {
   const user = useContext(UserContext)
@@ -33,22 +33,22 @@ const useUser = () => {
 }
 ```
 
-## Hooks 规则
+## Hook Rules
 
-- 自定义 hook 文件名 `use` 前缀：`useAuth.ts`
-- 一个 hook 只做一件事
-- `useEffect` 必须有正确的依赖数组，禁止空注释 `// eslint-disable-next-line`
-- `useEffect` 有副作用必须返回清理函数
-- 禁止在 `useEffect` 里直接写 async 函数
+- Custom hook file names must have the `use` prefix: `useAuth.ts`
+- A hook should do one thing only
+- `useEffect` must have a correct dependency array; suppressing with `// eslint-disable-next-line` is forbidden
+- `useEffect` with side effects must return a cleanup function
+- Passing an async function directly to `useEffect` is forbidden
 
 ```typescript
-// 禁止
+// Forbidden
 useEffect(async () => {
   const data = await fetchData()
   setData(data)
 }, [])
 
-// 正确
+// Correct
 useEffect(() => {
   const controller = new AbortController()
   const load = async () => {
@@ -64,21 +64,21 @@ useEffect(() => {
 }, [])
 ```
 
-## 性能
+## Performance
 
-- `React.memo` 只用在确实有性能问题的组件，不要预防性使用
-- `useMemo` / `useCallback` 只在以下场景使用：
-  - 计算量大的派生值
-  - 作为其他 hook 的依赖
-  - 传给 `React.memo` 包裹的子组件
-- 列表必须有稳定唯一的 `key`，禁止用 index
-- 大列表用虚拟化（`react-virtual` / `react-window`）
+- Use `React.memo` only on components with actual performance issues; do not use it preemptively
+- Use `useMemo` / `useCallback` only in the following scenarios:
+  - Computationally expensive derived values
+  - Dependencies of other hooks
+  - Props passed to children wrapped with `React.memo`
+- Lists must have stable, unique `key` values; using index is forbidden
+- Use virtualization for large lists (`react-virtual` / `react-window`)
 
 ## Props
 
-- 用 TypeScript interface 定义，命名 `XxxProps`
-- Props 能用基本类型就不用对象
-- 回调 props 用 `onXxx` 命名：`onClick`、`onSubmit`
+- Define with TypeScript interfaces, named `XxxProps`
+- Prefer primitive types over objects for props
+- Name callback props with `onXxx`: `onClick`, `onSubmit`
 
 ```typescript
 interface UserCardProps {
@@ -88,15 +88,15 @@ interface UserCardProps {
 }
 ```
 
-## 错误处理
+## Error Handling
 
-- 页面级组件必须有 Error Boundary
-- 异步操作必须处理 loading / error / empty 三种状态
-- 错误信息对用户友好，原始错误打到 console
+- Page-level components must have an Error Boundary
+- Async operations must handle loading / error / empty states
+- Error messages should be user-friendly; log raw errors to the console
 
-## 样式
+## Styling
 
-- 优先 Tailwind CSS
-- 需要动态样式时用 CSS Modules 或 `clsx`/`cn` 拼接类名
-- 禁止内联 style 对象（除非真正动态计算的值）
-- 禁止 `!important`
+- Prefer Tailwind CSS
+- Use CSS Modules or `clsx`/`cn` for class name concatenation when dynamic styles are needed
+- Inline style objects are forbidden (unless the values are truly dynamically computed)
+- `!important` is forbidden

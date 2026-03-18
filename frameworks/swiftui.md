@@ -1,20 +1,20 @@
-# SwiftUI 规范（Swift 5.9+ / macOS）
+# SwiftUI Guidelines (Swift 5.9+ / macOS)
 
-## 架构
+## Architecture
 
-- 用 MVVM：View → ViewModel → Model/Service
-- View 只负责声明 UI，业务逻辑全部放在 ViewModel
-- ViewModel 用 `@Observable`（Swift 5.9+），禁止旧的 `ObservableObject` + `@Published`
-- 数据持久化用 SwiftData，禁止直接用 UserDefaults 存复杂数据
+- Use MVVM: View -> ViewModel -> Model/Service
+- Views are responsible only for declaring UI; all business logic belongs in the ViewModel
+- Use `@Observable` (Swift 5.9+) for ViewModels; the legacy `ObservableObject` + `@Published` pattern is forbidden
+- Use SwiftData for data persistence; using UserDefaults directly for complex data is forbidden
 
 ```swift
-// 禁止：旧写法
+// Forbidden: legacy approach
 class UserViewModel: ObservableObject {
     @Published var name = ""
     @Published var isLoading = false
 }
 
-// 正确：Swift 5.9+ 新写法
+// Correct: Swift 5.9+ approach
 @Observable
 class UserViewModel {
     var name = ""
@@ -24,15 +24,15 @@ class UserViewModel {
 }
 ```
 
-## View 规则
+## View Rules
 
-- 用 `struct` 创建 View，保持小巧（不超过 80 行 body）
-- body 嵌套不超过 3 层，超过提取为子 View 或 ViewModifier
-- 抽取可复用样式为自定义 `ViewModifier`，不要重复写 `.font().foregroundColor().padding()`
-- 条件渲染用 `if let` / `switch`，不要用三元表达式拼 View
+- Create Views with `struct`, keep them small (body should not exceed 80 lines)
+- Body nesting must not exceed 3 levels; extract into sub-Views or ViewModifiers if it does
+- Extract reusable styles into custom `ViewModifier`s; do not repeat `.font().foregroundColor().padding()` chains
+- Use `if let` / `switch` for conditional rendering; do not use ternary expressions to compose Views
 
 ```swift
-// 禁止：body 里堆逻辑
+// Forbidden: piling logic in body
 var body: some View {
     VStack {
         Text(name)
@@ -41,12 +41,12 @@ var body: some View {
             .padding()
         Text(email)
             .font(.title)
-            .foregroundStyle(.primary)  // 重复样式
+            .foregroundStyle(.primary)  // Duplicated style
             .padding()
     }
 }
 
-// 正确：提取 ViewModifier
+// Correct: extract ViewModifier
 struct PrimaryTitle: ViewModifier {
     func body(content: Content) -> some View {
         content.font(.title).foregroundStyle(.primary).padding()
@@ -61,25 +61,25 @@ var body: some View {
 }
 ```
 
-## 状态管理
+## State Management
 
-- View 内部临时状态用 `@State`（仅限简单值：Bool、String、Int）
-- 共享数据通过 `@Environment` 注入，不要在 View 之间传递 ViewModel
-- 子 View 需要修改父 View 状态时用 `@Binding`
-- 全局共享状态通过 `.environment()` 注入到 View 树
+- Use `@State` for temporary state within a View (only for simple values: Bool, String, Int)
+- Inject shared data via `@Environment`; do not pass ViewModels between Views
+- Use `@Binding` when a child View needs to modify parent View state
+- Inject globally shared state into the View tree via `.environment()`
 
 ```swift
-// 正确的状态分层
+// Correct state layering
 @Observable class AppState {
     var currentUser: User?
     var theme: Theme = .system
 }
 
-// 根 View 注入
+// Inject at root View
 ContentView()
     .environment(appState)
 
-// 子 View 使用
+// Use in child View
 struct ProfileView: View {
     @Environment(AppState.self) private var appState
 }
@@ -87,23 +87,23 @@ struct ProfileView: View {
 
 ## SwiftData
 
-- Model 用 `@Model` 宏标记
-- 查询用 `@Query`，带排序和过滤
-- 写操作通过 `modelContext` 在 ViewModel 里执行
-- 复杂查询封装为 ViewModel 方法，不在 View 里写
+- Mark models with the `@Model` macro
+- Use `@Query` for queries, with sorting and filtering
+- Execute write operations through `modelContext` in the ViewModel
+- Encapsulate complex queries as ViewModel methods; do not write them in Views
 
-## 导航
+## Navigation
 
-- macOS 用 `NavigationSplitView`（侧边栏 + 详情）
-- 导航状态用枚举管理，不要用多个 Bool flag
+- Use `NavigationSplitView` on macOS (sidebar + detail)
+- Manage navigation state with enums; do not use multiple Bool flags
 
 ```swift
-// 禁止
+// Forbidden
 @State private var showSettings = false
 @State private var showProfile = false
 @State private var showHelp = false
 
-// 正确
+// Correct
 enum Destination: Hashable {
     case settings
     case profile
@@ -112,12 +112,12 @@ enum Destination: Hashable {
 @State private var selectedDestination: Destination?
 ```
 
-## 异步
+## Async
 
-- 用 `.task { }` 修饰符在 View 出现时发起异步操作
-- 用 `.task(id:)` 在参数变化时重新执行
-- 禁止在 `onAppear` 里用 `Task { }`（`.task` 会自动取消）
-- 加载状态和错误处理用明确的枚举
+- Use the `.task { }` modifier to initiate async operations when a View appears
+- Use `.task(id:)` to re-execute when a parameter changes
+- Do not use `Task { }` inside `onAppear` (`.task` handles cancellation automatically)
+- Use explicit enums for loading state and error handling
 
 ```swift
 enum LoadState<T> {
@@ -128,9 +128,9 @@ enum LoadState<T> {
 }
 ```
 
-## macOS 特有
+## macOS-Specific
 
-- 菜单栏应用用 `MenuBarExtra`
-- 多窗口用 `Window` 和 `WindowGroup`
-- 键盘快捷键用 `.keyboardShortcut()`
-- 支持暗色/亮色模式，用语义颜色（`.primary`、`.secondary`），不要硬编码颜色值
+- Use `MenuBarExtra` for menu bar apps
+- Use `Window` and `WindowGroup` for multi-window support
+- Use `.keyboardShortcut()` for keyboard shortcuts
+- Support dark/light mode; use semantic colors (`.primary`, `.secondary`); do not hardcode color values

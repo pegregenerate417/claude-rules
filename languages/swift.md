@@ -1,27 +1,27 @@
-# Swift 规范
+# Swift Guidelines
 
-## 基本原则
+## Core Principles
 
-- 优先 `let` 而非 `var`，默认不可变
-- 利用 Swift 的类型推断，公共 API 显式标注类型
-- 用 `guard` 提前退出，避免嵌套
-- 用值类型（`struct`、`enum`）优于引用类型（`class`），除非需要引用语义或继承
+- Prefer `let` over `var`; default to immutability
+- Leverage Swift's type inference; explicitly annotate types for public APIs
+- Use `guard` for early exits to avoid nesting
+- Prefer value types (`struct`, `enum`) over reference types (`class`), unless reference semantics or inheritance is needed
 
-## 命名
+## Naming
 
-- 遵循 Swift API Design Guidelines
-- 类型和协议：`PascalCase`（`UserProfile`、`Configurable`）
-- 函数和变量：`camelCase`（`fetchUser`、`isValid`）
-- 函数名读起来像英语短语：`remove(at: index)` 而非 `remove(index: index)`
-- 布尔属性用 `is`/`has`/`should` 前缀
-- 工厂方法用 `make` 前缀：`makeIterator()`
+- Follow the Swift API Design Guidelines
+- Types and protocols: `PascalCase` (`UserProfile`, `Configurable`)
+- Functions and variables: `camelCase` (`fetchUser`, `isValid`)
+- Function names should read like English phrases: `remove(at: index)` rather than `remove(index: index)`
+- Boolean properties use `is`/`has`/`should` prefix
+- Factory methods use `make` prefix: `makeIterator()`
 
-## 错误处理
+## Error Handling
 
-- 可恢复错误用 `throws`，不可恢复用 `fatalError`（仅限编程错误）
-- 自定义错误类型实现 `LocalizedError`，提供有意义的 `errorDescription`
-- 禁止 `try!`（除非 100% 确定不会失败，如加载 bundle 资源）
-- 用 `try?` 时必须处理 nil 情况
+- Use `throws` for recoverable errors; use `fatalError` only for programmer errors
+- Custom error types should conform to `LocalizedError` and provide a meaningful `errorDescription`
+- No `try!` (unless the call is 100% guaranteed to succeed, e.g., loading a bundle resource)
+- When using `try?`, always handle the nil case
 
 ```swift
 // 禁止
@@ -37,12 +37,12 @@ do {
 }
 ```
 
-## 可选值
+## Optionals
 
-- 优先 `guard let` 解包并提前退出
-- 用 `??` 提供默认值
-- 禁止 `!` 强制解包（除非在 `IBOutlet` 或有注释说明的极端场景）
-- 可选链 `?.` 串联调用
+- Prefer `guard let` for unwrapping with early exit
+- Use `??` to provide default values
+- No `!` force unwrapping (except for `IBOutlet` or extreme cases with an explanatory comment)
+- Chain calls with optional chaining `?.`
 
 ```swift
 // 禁止
@@ -61,13 +61,13 @@ func process(user: User?) {
 }
 ```
 
-## 并发（Swift Concurrency）
+## Concurrency (Swift Concurrency)
 
-- 用 `async/await` 替代 completion handler
-- 用 `actor` 保护共享可变状态
-- 用 `TaskGroup` 处理并发操作
-- 标记 `@MainActor` 的代码仅限 UI 更新
-- 用 `Task { }` 从同步上下文桥接到异步，不要用 `DispatchQueue`
+- Use `async/await` instead of completion handlers
+- Use `actor` to protect shared mutable state
+- Use `TaskGroup` for concurrent operations
+- Code marked `@MainActor` should be limited to UI updates
+- Use `Task { }` to bridge from synchronous to asynchronous contexts; do not use `DispatchQueue`
 
 ```swift
 // 禁止：老式回调
@@ -77,16 +77,16 @@ func fetchUser(id: String, completion: @escaping (Result<User, Error>) -> Void) 
 func fetchUser(id: String) async throws -> User { ... }
 ```
 
-## 协议
+## Protocols
 
-- 协议命名用形容词（`Configurable`、`Identifiable`）或名词（`DataSource`、`Delegate`）
-- 用协议扩展提供默认实现
-- 优先协议组合（`Codable & Identifiable`）而非继承链
-- 用 `some` 和 `any` 区分不透明类型和存在类型
+- Name protocols with adjectives (`Configurable`, `Identifiable`) or nouns (`DataSource`, `Delegate`)
+- Use protocol extensions to provide default implementations
+- Prefer protocol composition (`Codable & Identifiable`) over inheritance chains
+- Use `some` and `any` to distinguish opaque types from existential types
 
-## 访问控制
+## Access Control
 
-- 最小可见性：默认 `private`，需要时才放宽
-- 模块内部用 `internal`（默认），跨模块用 `public`
-- `open` 仅在明确允许子类化时使用
-- 用 `fileprivate` 替代 `private` 仅当同文件多个类型需要共享
+- Least visibility: default to `private`, widen only when needed
+- Use `internal` (the default) within a module; use `public` across modules
+- Use `open` only when subclassing is explicitly intended
+- Use `fileprivate` instead of `private` only when multiple types in the same file need shared access

@@ -1,12 +1,12 @@
-# CSS 规范
+# CSS Guidelines
 
-> 使用 Tailwind CSS 的项目优先用 Tailwind 类名，参考 frameworks/tailwind.md。本规范用于原生 CSS / SCSS / CSS Modules 场景。
+> For projects using Tailwind CSS, prefer Tailwind utility classes -- see frameworks/tailwind.md. These guidelines apply to vanilla CSS / SCSS / CSS Modules.
 
-## 基本原则
+## Core Principles
 
-- 用 CSS 自定义属性（`--var`）管理设计令牌（颜色、间距、字号、圆角）
-- 禁止硬编码颜色值散落各处，统一定义在 `:root` 或主题变量中
-- 移动优先：默认写移动端样式，用 `min-width` 媒体查询向上适配
+- Use CSS custom properties (`--var`) to manage design tokens (colors, spacing, font sizes, border radii)
+- No hard-coded color values scattered throughout; define them centrally in `:root` or theme variables
+- Mobile first: write mobile styles by default, then scale up with `min-width` media queries
 
 ```css
 /* 正确：设计令牌集中管理 */
@@ -25,12 +25,12 @@
 }
 ```
 
-## 布局
+## Layout
 
-- 用 Flexbox 做一维布局（导航栏、卡片行）
-- 用 Grid 做二维布局（页面骨架、网格列表）
-- 禁止用 `float` 做布局（仅限文字环绕图片场景）
-- 禁止用固定像素宽度做响应式（用 `%`、`vw`、`fr`、`min()`/`max()`/`clamp()`）
+- Use Flexbox for one-dimensional layouts (nav bars, card rows)
+- Use Grid for two-dimensional layouts (page skeletons, grid lists)
+- No `float` for layout (only acceptable for text wrapping around images)
+- No fixed pixel widths for responsive design (use `%`, `vw`, `fr`, `min()`/`max()`/`clamp()`)
 
 ```css
 /* 禁止 */
@@ -40,12 +40,12 @@
 .container { width: min(90%, 1200px); margin-inline: auto; }
 ```
 
-## 命名（BEM 或语义化）
+## Naming (BEM or Semantic)
 
-- 类名用小写连字符：`.user-card`、`.nav-item`
-- 避免过于通用的类名：`.box`、`.wrapper`、`.container`（除非有明确作用域）
-- 禁止用 ID 选择器做样式（`#header { }`），ID 只用于 JS 或锚点
-- 嵌套选择器不超过 3 层
+- Class names use lowercase with hyphens: `.user-card`, `.nav-item`
+- Avoid overly generic class names: `.box`, `.wrapper`, `.container` (unless clearly scoped)
+- No ID selectors for styling (`#header { }`); IDs are reserved for JS or anchor links
+- Selector nesting should not exceed 3 levels
 
 ```css
 /* 禁止：嵌套太深 */
@@ -55,26 +55,26 @@
 .sidebar-menu-link { ... }
 ```
 
-## 现代 CSS 特性
+## Modern CSS Features
 
-- 用 `gap` 替代 margin 做间距（Flex/Grid 子元素之间）
-- 用 `aspect-ratio` 替代 padding-top hack
-- 用 `container query`（`@container`）做组件级响应式（浏览器支持的场景）
-- 用 `color-mix()` 做颜色变体
-- 用 `prefers-color-scheme` 支持暗色模式
+- Use `gap` instead of margins for spacing between Flex/Grid children
+- Use `aspect-ratio` instead of the padding-top hack
+- Use `container query` (`@container`) for component-level responsiveness (where browser support allows)
+- Use `color-mix()` for color variants
+- Use `prefers-color-scheme` to support dark mode
 
-## 禁止的写法
+## Prohibited Patterns
 
-- 禁止 `!important`（除非覆盖第三方库样式，且必须加注释说明原因）
-- 禁止 `*` 通配选择器做样式（reset 除外）
-- 禁止用 `px` 做字号（用 `rem`），间距可以用 `px` 或 `rem`
-- 禁止行内样式（`style=""`），除非是动态计算值（如 JS 控制位移）
+- No `!important` (unless overriding third-party library styles, and a comment must explain why)
+- No `*` universal selector for styling (resets excepted)
+- No `px` for font sizes (use `rem`); `px` or `rem` are fine for spacing
+- No inline styles (`style=""`), unless the value is dynamically computed (e.g., JS-controlled positioning)
 
-## 动画
+## Animations
 
-- 简单过渡用 `transition`，复杂动画用 `@keyframes`
-- 只动画 `transform` 和 `opacity`（GPU 加速），避免动画 `width`/`height`/`margin`
-- 尊重 `prefers-reduced-motion`
+- Use `transition` for simple transitions; use `@keyframes` for complex animations
+- Only animate `transform` and `opacity` (GPU-accelerated); avoid animating `width`/`height`/`margin`
+- Respect `prefers-reduced-motion`
 
 ```css
 @media (prefers-reduced-motion: reduce) {

@@ -1,20 +1,20 @@
-# Tauri 规范
+# Tauri Guidelines
 
-## 架构
+## Architecture
 
-- 前端负责 UI，Rust 后端负责系统操作（文件、网络、进程等）
-- 前后端通过 Tauri Command 通信，不要在前端用 `fetch` 绕过 Tauri
-- Command 是唯一的前后端桥梁，保持 Command 接口薄而清晰
+- The frontend handles UI; the Rust backend handles system operations (files, network, processes, etc.)
+- Frontend and backend communicate through Tauri Commands; do not use `fetch` in the frontend to bypass Tauri
+- Commands are the sole bridge between frontend and backend; keep Command interfaces thin and clear
 
-## Command 设计
+## Command Design
 
-- Command 命名用动词：`get_user`、`save_config`、`open_file`
-- 参数和返回值必须实现 `Serialize`/`Deserialize`
-- 错误统一返回 `Result<T, String>` 或自定义错误类型
-- 前端用 `invoke<T>()` 泛型调用，不要用 `any`
+- Name Commands with verbs: `get_user`, `save_config`, `open_file`
+- Parameters and return values must implement `Serialize`/`Deserialize`
+- Return errors uniformly as `Result<T, String>` or a custom error type
+- Use the generic `invoke<T>()` on the frontend; do not use `any`
 
 ```rust
-// Rust 侧
+// Rust side
 #[tauri::command]
 async fn get_config(app: AppHandle) -> Result<AppConfig, String> {
     load_config(&app).map_err(|e| e.to_string())
@@ -22,37 +22,37 @@ async fn get_config(app: AppHandle) -> Result<AppConfig, String> {
 ```
 
 ```typescript
-// 前端侧
+// Frontend side
 import { invoke } from '@tauri-apps/api/core'
 
 const config = await invoke<AppConfig>('get_config')
 ```
 
-## 前端（适配 Vue/React）
+## Frontend (Vue/React Integration)
 
-- 前端框架规则参考对应的 vue.md 或 react.md
-- Tauri API 调用封装到独立的 service 层，组件不直接调用 `invoke`
-- 文件操作用 `@tauri-apps/plugin-fs`，不要用 Web File API
+- Follow the corresponding vue.md or react.md for frontend framework rules
+- Wrap Tauri API calls in a dedicated service layer; components should not call `invoke` directly
+- Use `@tauri-apps/plugin-fs` for file operations; do not use the Web File API
 
 ```typescript
-// 封装 Tauri 调用
+// Wrap Tauri calls
 // services/config.ts
 export async function getConfig(): Promise<AppConfig> {
   return invoke<AppConfig>('get_config')
 }
 
-// 组件里使用 service，不直接用 invoke
+// Use the service in components, not invoke directly
 const config = await getConfig()
 ```
 
-## 窗口管理
+## Window Management
 
-- 多窗口用 `WebviewWindow` 创建
-- 窗口间通信用 Tauri Event（`emit` / `listen`）
-- 窗口配置在 `tauri.conf.json` 里声明，不要在代码里硬编码尺寸
+- Use `WebviewWindow` to create multiple windows
+- Use Tauri Events (`emit` / `listen`) for inter-window communication
+- Declare window configuration in `tauri.conf.json`; do not hardcode dimensions in code
 
-## 安全
+## Security
 
-- `tauri.conf.json` 里的 `allowlist` 只开启需要的权限
-- 禁止开启 `shell.open` 的通配符模式
-- Command 参数做基本校验，不要信任前端传来的路径
+- In `tauri.conf.json`, only enable required permissions in `allowlist`
+- Enabling wildcard mode for `shell.open` is forbidden
+- Validate Command parameters on the backend; do not trust paths sent from the frontend

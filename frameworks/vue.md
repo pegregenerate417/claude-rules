@@ -1,17 +1,17 @@
-# Vue 3 规范
+# Vue 3 Guidelines
 
-## 组件基本规则
+## Basic Component Rules
 
-- 只用 `<script setup lang="ts">`，禁止选项式 API
-- 单个组件文件不超过 200 行，超过必须拆分
-- 组件只负责 UI 渲染和用户交互，业务逻辑提取到 composable
-- 模板中禁止复杂表达式，超过一行的逻辑提取为 computed 或方法
+- Use only `<script setup lang="ts">`, Options API is forbidden
+- A single component file must not exceed 200 lines; split if it does
+- Components are responsible only for UI rendering and user interaction; extract business logic into composables
+- Complex expressions in templates are forbidden; extract anything longer than one line into a computed property or method
 
 ```vue
-<!-- 禁止：模板里写逻辑 -->
+<!-- Forbidden: logic in template -->
 <span>{{ items.filter(i => i.active).map(i => i.name).join(', ') }}</span>
 
-<!-- 正确 -->
+<!-- Correct -->
 <span>{{ activeNames }}</span>
 
 <script setup lang="ts">
@@ -21,32 +21,32 @@ const activeNames = computed(() =>
 </script>
 ```
 
-## 响应式
+## Reactivity
 
-- 基本类型用 `ref`，对象/数组用 `reactive`
-- 禁止对基本类型用 `reactive`（会丢失响应性）
-- 禁止解构 `reactive` 对象（用 `toRefs` 或直接 `.` 访问）
-- `computed` 必须是纯函数，禁止在 computed 里修改状态或发请求
+- Use `ref` for primitive types, `reactive` for objects/arrays
+- Do not use `reactive` for primitive types (reactivity will be lost)
+- Do not destructure `reactive` objects (use `toRefs` or access properties directly with `.`)
+- `computed` must be a pure function; modifying state or making requests inside computed is forbidden
 
 ```typescript
-// 禁止
-const state = reactive(0)  // 基本类型不能用 reactive
-const { name } = reactive({ name: 'foo' })  // 解构丢失响应性
+// Forbidden
+const state = reactive(0)  // Cannot use reactive for primitive types
+const { name } = reactive({ name: 'foo' })  // Destructuring loses reactivity
 
-// 正确
+// Correct
 const count = ref(0)
 const user = reactive({ name: 'foo', age: 25 })
 ```
 
-## Composable
+## Composables
 
-- 文件名 `use` 前缀：`useAuth.ts`、`usePagination.ts`
-- 一个 composable 只做一件事
-- 返回值用对象解构，不要返回数组（除非只有两个值如 `[state, setState]`）
-- composable 内部负责自己的生命周期清理（`onUnmounted` 里清除定时器、监听器等）
+- File names must have the `use` prefix: `useAuth.ts`, `usePagination.ts`
+- A composable should do one thing only
+- Return values as object destructuring, not arrays (unless there are only two values like `[state, setState]`)
+- Composables are responsible for their own lifecycle cleanup (clear timers, listeners, etc. in `onUnmounted`)
 
 ```typescript
-// 正确的 composable 结构
+// Correct composable structure
 export function useSearch(initialQuery = '') {
   const query = ref(initialQuery)
   const results = ref<SearchResult[]>([])
@@ -61,7 +61,7 @@ export function useSearch(initialQuery = '') {
     }
   }
 
-  // 自己清理
+  // Self-cleanup
   const debouncedSearch = useDebounceFn(search, 300)
   watch(query, debouncedSearch)
 
@@ -69,27 +69,27 @@ export function useSearch(initialQuery = '') {
 }
 ```
 
-## 状态管理
+## State Management
 
-- 用 Pinia，禁止 Vuex
-- Store 按功能域拆分：`useUserStore`、`useCartStore`
-- Store 里只放跨组件共享的状态，组件内部状态用 `ref`/`reactive`
-- Action 里处理异步操作，getter 做派生计算
-- 禁止在组件里直接修改 store 的 state，通过 action 修改
+- Use Pinia; Vuex is forbidden
+- Split stores by feature domain: `useUserStore`, `useCartStore`
+- Only put cross-component shared state in stores; use `ref`/`reactive` for component-local state
+- Handle async operations in actions; use getters for derived computations
+- Do not modify store state directly in components; modify through actions
 
-## Props 和 Emits
+## Props and Emits
 
-- 用 `defineProps` 的泛型语法做类型定义，不用运行时声明
-- 必须定义 emit 类型
-- Props 能用基本类型就不用对象，降低耦合
+- Use the generic syntax of `defineProps` for type definitions, not runtime declarations
+- Emit types must be defined
+- Prefer primitive types over objects for props to reduce coupling
 
 ```typescript
-// 禁止：运行时声明
+// Forbidden: runtime declaration
 const props = defineProps({
   title: { type: String, required: true }
 })
 
-// 正确：类型声明
+// Correct: type declaration
 const props = defineProps<{
   title: string
   count?: number
@@ -101,15 +101,15 @@ const emit = defineEmits<{
 }>()
 ```
 
-## 路由
+## Routing
 
-- 路由组件用 `defineAsyncComponent` 或动态 `import()` 懒加载
-- 路由守卫里的异步操作（鉴权等）必须有错误处理和 loading 状态
-- 路由参数通过 props 传入组件，不在组件里直接读 `useRoute().params`
+- Lazy-load route components with `defineAsyncComponent` or dynamic `import()`
+- Async operations in route guards (authentication, etc.) must have error handling and loading state
+- Pass route params to components via props; do not read `useRoute().params` directly inside components
 
-## 性能
+## Performance
 
-- 长列表用虚拟滚动（`vue-virtual-scroller` 或类似方案）
-- 纯展示组件不需要 `v-if` 频繁切换的用 `v-show`
-- `v-for` 必须有唯一且稳定的 `key`，禁止用 index 做 key（除非列表不会变动）
-- 大型组件用 `defineAsyncComponent` 按需加载
+- Use virtual scrolling for long lists (`vue-virtual-scroller` or similar)
+- Use `v-show` instead of `v-if` for display-only components that toggle frequently
+- `v-for` must have a unique and stable `key`; using index as key is forbidden (unless the list never changes)
+- Load large components on demand with `defineAsyncComponent`

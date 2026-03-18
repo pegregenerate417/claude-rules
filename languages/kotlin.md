@@ -1,29 +1,29 @@
-# Kotlin 规范
+# Kotlin Guidelines
 
-## 基本原则
+## Core Principles
 
-- 优先 `val` 而非 `var`，默认不可变
-- 优先类型推断，公共 API 的返回类型显式声明
-- 禁止 `Any` 做参数或返回类型，创建具体类型
-- 禁止魔法数字，定义命名常量
+- Prefer `val` over `var`; default to immutability
+- Prefer type inference; explicitly declare return types for public APIs
+- No `Any` as a parameter or return type; create specific types
+- No magic numbers; define named constants
 
-## 命名
+## Naming
 
-- 类和接口：`PascalCase`（`UserRepository`、`PaymentService`）
-- 函数和变量：`camelCase`（`getUserById`、`isValid`）
-- 常量和枚举值：`UPPER_SNAKE_CASE`（`MAX_RETRY_COUNT`）
-- 包名：全小写点分隔（`com.example.userservice`）
-- 布尔值：`is`/`has`/`can`/`should` 前缀
-- 禁止无意义缩写，标准缩写除外（API、URL、HTTP、JSON、id、ctx）
+- Classes and interfaces: `PascalCase` (`UserRepository`, `PaymentService`)
+- Functions and variables: `camelCase` (`getUserById`, `isValid`)
+- Constants and enum values: `UPPER_SNAKE_CASE` (`MAX_RETRY_COUNT`)
+- Package names: all lowercase, dot-separated (`com.example.userservice`)
+- Booleans: `is`/`has`/`can`/`should` prefix
+- No meaningless abbreviations; standard abbreviations are acceptable (API, URL, HTTP, JSON, id, ctx)
 
-## 函数设计
+## Function Design
 
-- 单个函数不超过 20 行
-- 函数名以动词开头
-- 单行返回用表达式函数：`fun square(x: Int) = x * x`
-- 用命名参数提高可读性：`createUser(name = "John", age = 25)`
-- 用默认参数替代函数重载
-- 通过提前返回避免深层嵌套
+- A single function should not exceed 20 lines
+- Function names start with a verb
+- Use expression functions for single-line returns: `fun square(x: Int) = x * x`
+- Use named arguments for readability: `createUser(name = "John", age = 25)`
+- Use default parameters instead of function overloads
+- Return early to avoid deep nesting
 
 ```kotlin
 // 禁止
@@ -47,14 +47,14 @@ fun process(user: User?): String {
 }
 ```
 
-## 类设计
+## Class Design
 
-- 数据承载用 `data class`
-- 有限状态用 `sealed class` / `sealed interface`
-- 单例和工具类用 `object`
-- 类型安全的原始包装用 `value class`
-- 单个类不超过 200 行、不超过 10 个公共方法
-- 组合优于继承
+- Use `data class` for data holders
+- Use `sealed class` / `sealed interface` for finite states
+- Use `object` for singletons and utility classes
+- Use `value class` for type-safe primitive wrappers
+- A single class should not exceed 200 lines or 10 public methods
+- Composition over inheritance
 
 ```kotlin
 // 用 sealed interface 表示状态，而非 enum + 额外字段
@@ -65,11 +65,11 @@ sealed interface Result<out T> {
 }
 ```
 
-## 空安全
+## Null Safety
 
-- 用 `?.` 安全调用，用 `?:` 提供默认值
-- 禁止 `!!`（除非有注释说明为什么保证非空）
-- 不要用 `if (x != null)` 嵌套，用 `?.let` 或 `?:` 链
+- Use `?.` for safe calls and `?:` for default values
+- No `!!` (unless accompanied by a comment explaining why non-null is guaranteed)
+- Do not nest `if (x != null)` checks; use `?.let` or `?:` chains instead
 
 ```kotlin
 // 禁止
@@ -79,12 +79,12 @@ val name = user!!.name
 val name = user?.name ?: "Unknown"
 ```
 
-## 协程
+## Coroutines
 
-- 禁止 `GlobalScope`，始终使用结构化并发（`viewModelScope`、`lifecycleScope`、`coroutineScope`）
-- `suspend` 函数处理单次异步操作，`Flow` 处理数据流
-- UI 状态用 `StateFlow`，事件用 `SharedFlow`
-- 并发操作用 `async`/`await`，不要顺序等待
+- No `GlobalScope`; always use structured concurrency (`viewModelScope`, `lifecycleScope`, `coroutineScope`)
+- `suspend` functions for one-shot async operations; `Flow` for data streams
+- Use `StateFlow` for UI state; use `SharedFlow` for events
+- Use `async`/`await` for concurrent operations; do not await sequentially
 
 ```kotlin
 // 禁止：顺序等待两个无关请求
@@ -99,14 +99,14 @@ coroutineScope {
 }
 ```
 
-## 集合
+## Collections
 
-- 默认用不可变集合：`listOf`、`setOf`、`mapOf`
-- 大数据集或链式操作用 `asSequence()`
-- 简单 lambda 用 `it`，复杂场景用命名参数
-- 善用 `takeIf`、`takeUnless`、作用域函数
+- Default to immutable collections: `listOf`, `setOf`, `mapOf`
+- Use `asSequence()` for large data sets or chained operations
+- Use `it` for simple lambdas; use named parameters for complex scenarios
+- Leverage `takeIf`, `takeUnless`, and scope functions
 
-## 可见性
+## Visibility
 
-- 最小可见性原则：模块内部用 `internal`，类内部用 `private`
-- 不要把所有东西都 `public`
+- Principle of least visibility: use `internal` within a module, `private` within a class
+- Do not make everything `public`

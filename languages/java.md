@@ -1,22 +1,22 @@
-# Java 规范
+# Java Guidelines
 
-## 基本原则
+## Core Principles
 
-- 最低 Java 17，优先使用新版本特性（record、sealed class、pattern matching、text block）
-- 禁止裸用 `null`，返回值用 `Optional<T>` 包装，参数禁止传 null
-- 优先不可变：字段用 `final`，集合用 `List.of()`、`Map.of()`、`Collections.unmodifiable*`
-- 禁止魔法数字和魔法字符串，提取为常量
+- Minimum Java 17; prefer newer language features (record, sealed class, pattern matching, text block)
+- No bare `null`; wrap return values with `Optional<T>`, and never pass null as an argument
+- Prefer immutability: use `final` for fields, `List.of()`, `Map.of()`, `Collections.unmodifiable*` for collections
+- No magic numbers or magic strings; extract them into constants
 
-## 命名
+## Naming
 
-- 类和接口：`PascalCase`（`UserService`、`Configurable`）
-- 方法和变量：`camelCase`（`getUserById`、`isValid`）
-- 常量：`UPPER_SNAKE_CASE`（`MAX_RETRY_COUNT`）
-- 包名：全小写（`com.example.userservice`）
-- 布尔值：`is`/`has`/`can`/`should` 前缀
-- 接口不加 `I` 前缀，实现类用 `Impl` 后缀或具体描述（`JdbcUserRepository`）
+- Classes and interfaces: `PascalCase` (`UserService`, `Configurable`)
+- Methods and variables: `camelCase` (`getUserById`, `isValid`)
+- Constants: `UPPER_SNAKE_CASE` (`MAX_RETRY_COUNT`)
+- Package names: all lowercase (`com.example.userservice`)
+- Booleans: `is`/`has`/`can`/`should` prefix
+- No `I` prefix for interfaces; implementation classes use an `Impl` suffix or a descriptive name (`JdbcUserRepository`)
 
-## 现代 Java 特性（17+）
+## Modern Java Features (17+)
 
 ```java
 // 禁止：传统 POJO
@@ -46,13 +46,13 @@ public record Circle(double radius) implements Shape {}
 public record Rectangle(double width, double height) implements Shape {}
 ```
 
-## 类设计
+## Class Design
 
-- 单个类不超过 300 行
-- 单个方法不超过 30 行
-- 方法参数不超过 4 个，超过用参数对象
-- 组合优于继承，继承层级不超过 3 层
-- 工具类用 `final class` + 私有构造器，不要用 `abstract class`
+- A single class should not exceed 300 lines
+- A single method should not exceed 30 lines
+- No more than 4 method parameters; use a parameter object when exceeding this limit
+- Composition over inheritance; inheritance depth should not exceed 3 levels
+- Utility classes should be `final class` with a private constructor; do not use `abstract class`
 
 ## Optional
 
@@ -74,12 +74,12 @@ void process(String name) { ... }
 void process() { process("default"); }
 ```
 
-## 集合和 Stream
+## Collections and Streams
 
-- 创建不可变集合：`List.of()`、`Set.of()`、`Map.of()`
-- Stream 链不超过 5 步，超过提取中间变量或方法
-- 简单循环不要强行用 Stream，`for-each` 更清晰时就用 `for-each`
-- 禁止在 Stream 里修改外部状态（副作用）
+- Create immutable collections: `List.of()`, `Set.of()`, `Map.of()`
+- Stream chains should not exceed 5 steps; extract intermediate variables or methods when they do
+- Do not force Streams for simple loops; use `for-each` when it is clearer
+- No side effects inside Streams (do not modify external state)
 
 ```java
 // 禁止：Stream 里有副作用
@@ -92,12 +92,12 @@ List<String> results = users.stream()
     .toList();
 ```
 
-## 异常处理
+## Exception Handling
 
-- 捕获具体异常，禁止 `catch (Exception e)`
-- 业务异常继承自定义基类，携带错误码
-- 禁止吞异常（空 catch 块）
-- 用 `try-with-resources` 管理资源
+- Catch specific exceptions; no `catch (Exception e)`
+- Business exceptions should extend a custom base class and carry an error code
+- No swallowing exceptions (empty catch blocks)
+- Use `try-with-resources` to manage resources
 
 ```java
 // 禁止
@@ -115,9 +115,9 @@ try (var reader = Files.newBufferedReader(path)) {
 }
 ```
 
-## 并发
+## Concurrency
 
-- 优先用 `ExecutorService` / `CompletableFuture`，不要裸 `new Thread()`
-- Java 21+ 优先用虚拟线程（`Thread.ofVirtual()`）
-- 共享可变状态用 `ConcurrentHashMap`、`AtomicReference` 等线程安全类
-- 禁止 `synchronized` 整个方法，缩小同步范围
+- Prefer `ExecutorService` / `CompletableFuture`; do not use bare `new Thread()`
+- On Java 21+, prefer virtual threads (`Thread.ofVirtual()`)
+- Use thread-safe classes for shared mutable state: `ConcurrentHashMap`, `AtomicReference`, etc.
+- Do not `synchronized` an entire method; minimize the synchronized scope

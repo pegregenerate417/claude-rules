@@ -1,26 +1,26 @@
-# Spring Boot 规范（Kotlin）
+# Spring Boot Guidelines (Kotlin)
 
-## 分层架构
+## Layered Architecture
 
 ```
-controller/  → 接收请求、参数校验、调用 service、返回响应
-service/     → 业务逻辑，注入 repository
-repository/  → 数据访问，Spring Data JPA/MongoDB
-model/       → 实体类
-dto/         → 数据传输对象（请求/响应）
-config/      → 配置类
+controller/  → Receives requests, validates parameters, calls services, returns responses
+service/     → Business logic, injects repositories
+repository/  → Data access, Spring Data JPA/MongoDB
+model/       → Entity classes
+dto/         → Data Transfer Objects (request/response)
+config/      → Configuration classes
 ```
 
-- Controller 不写业务逻辑，只做参数校验和转发
-- Service 不依赖 Controller 层的类型（HttpServletRequest 等）
-- Repository 不写业务逻辑，只做数据查询
+- Controllers must not contain business logic; they only validate parameters and delegate
+- Services must not depend on Controller-layer types (HttpServletRequest, etc.)
+- Repositories must not contain business logic; they only perform data queries
 
 ## Controller
 
-- RESTful 风格：资源用名词复数，动作用 HTTP 方法
-- 统一返回格式，不要有的接口返回裸数据有的返回包装对象
-- 参数校验用 `@Valid` + JSR 303 注解，不要手写 if 判断
-- 分页查询用 `Pageable` 参数
+- Follow RESTful conventions: use plural nouns for resources, HTTP methods for actions
+- Use a unified response format; do not mix bare data and wrapped objects across endpoints
+- Use `@Valid` + JSR 303 annotations for parameter validation; do not write manual if-checks
+- Use the `Pageable` parameter for paginated queries
 
 ```kotlin
 @RestController
@@ -42,19 +42,19 @@ class UserController(
 
 ## Service
 
-- 接口 + 实现分离（`UserService` 接口 + `UserServiceImpl`）
-- 事务注解 `@Transactional` 加在 Service 方法上
-- 只读操作用 `@Transactional(readOnly = true)`
-- Service 之间可以互相调用，但禁止循环依赖
+- Separate interface and implementation (`UserService` interface + `UserServiceImpl`)
+- Apply the `@Transactional` annotation on Service methods
+- Use `@Transactional(readOnly = true)` for read-only operations
+- Services may call each other, but circular dependencies are forbidden
 
 ## DTO
 
-- 请求用 `XxxRequest`，响应用 `XxxDto`
-- 禁止直接把实体类返回给前端（泄露内部结构、懒加载问题）
-- 实体和 DTO 之间的转换封装为扩展函数
+- Name request DTOs `XxxRequest`, response DTOs `XxxDto`
+- Returning entity classes directly to the frontend is forbidden (exposes internal structure, causes lazy-loading issues)
+- Encapsulate entity-to-DTO conversion as extension functions
 
 ```kotlin
-// 实体转 DTO 的扩展函数
+// Extension function for entity-to-DTO conversion
 fun User.toDto() = UserDto(
     id = id,
     name = name,
@@ -62,11 +62,11 @@ fun User.toDto() = UserDto(
 )
 ```
 
-## 异常处理
+## Exception Handling
 
-- 用 `@RestControllerAdvice` 全局处理异常
-- 业务异常继承自定义基类，携带错误码
-- 禁止在 Controller 里 try-catch，让异常自然抛到全局处理器
+- Use `@RestControllerAdvice` for global exception handling
+- Business exceptions should extend a custom base class and carry an error code
+- Do not use try-catch in Controllers; let exceptions propagate to the global handler
 
 ```kotlin
 abstract class BusinessException(
@@ -75,17 +75,17 @@ abstract class BusinessException(
 ) : RuntimeException(message)
 
 class UserNotFoundException(id: Long) :
-    BusinessException("USER_NOT_FOUND", "用户不存在: $id")
+    BusinessException("USER_NOT_FOUND", "User not found: $id")
 ```
 
-## 配置
+## Configuration
 
-- 配置项用 `@ConfigurationProperties`，不要散落的 `@Value`
-- 敏感配置（密码、密钥）不提交到代码仓库
-- 不同环境用 `application-{profile}.yml` 区分
+- Use `@ConfigurationProperties` for configuration; do not use scattered `@Value` annotations
+- Sensitive configuration (passwords, keys) must not be committed to the repository
+- Use `application-{profile}.yml` to differentiate between environments
 
-## 依赖注入
+## Dependency Injection
 
-- 优先构造器注入（Kotlin 主构造器天然支持）
-- 禁止字段注入（`@Autowired` 在字段上）
-- 需要延迟初始化用 `lateinit` 或 `by lazy`
+- Prefer constructor injection (Kotlin primary constructors support this naturally)
+- Field injection (`@Autowired` on fields) is forbidden
+- Use `lateinit` or `by lazy` when lazy initialization is needed

@@ -1,31 +1,31 @@
-# Git 规范
+# Git Conventions
 
-## 提交规则
+## Commit Rules
 
-- 不要自动提交代码，除非明确要求
-- 提交前确保代码能正常运行
-- 直接在 main/master 上提交，保持敏捷
+- Do not commit code automatically unless explicitly requested
+- Ensure the code runs correctly before committing
+- Commit directly to main/master to stay agile
 
-## 提交 Message 格式
+## Commit Message Format
 
 ```
 <type>(<scope>): <subject>
 ```
 
-冒号后有空格。type 枚举：
+A space follows the colon. Type values:
 
-| type | 用途 |
-|------|------|
-| feat | 新增功能 |
-| fix | 修复 bug |
-| docs | 文档注释 |
-| style | 代码格式（不影响运行） |
-| refactor | 重构优化（非新功能、非修复） |
-| perf | 性能优化 |
-| test | 增加测试 |
-| chore | 构建过程或辅助工具变动 |
+| type | Purpose |
+|------|---------|
+| feat | New feature |
+| fix | Bug fix |
+| docs | Documentation or comments |
+| style | Code formatting (no runtime impact) |
+| refactor | Refactoring (not a new feature or bug fix) |
+| perf | Performance optimization |
+| test | Adding tests |
+| chore | Build process or tooling changes |
 
-超过两个要点时用列表：
+Use a list when there are more than two key points:
 
 ```
 feat(web): implement email verification workflow

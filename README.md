@@ -1,99 +1,119 @@
 # Claude Rules
 
-面向 Claude Code 的编码规范模板库。通过 **base + language + framework** 三层组合，为项目生成针对性的 CLAUDE.md，让 AI 写出符合规范的代码。
+English | [中文](README_CN.md)
 
-## 解决什么问题
+Coding standards template library for AI coding assistants. Combine **base + language + framework** layers to generate a project-specific rules file that keeps AI-generated code clean and consistent.
 
-AI 编码助手在面对旧项目时，倾向于模仿已有代码风格——包括坏习惯。本规范库的核心理念：
+## The Problem
 
-> **不要模仿旧代码，按规范重构。**
+AI coding assistants tend to mimic existing code style in legacy projects — including bad habits. The core principle of this library:
 
-每条规则都是可执行的具体指令（而非"使用适当的 XX"这种空话），并附有"禁止/正确"对比示例。
+> **Don't imitate legacy code. Refactor according to the standards.**
 
-## 目录结构
+Every rule is a concrete, actionable directive (not vague "use proper XX"), with "Bad / Good" code comparison examples.
+
+## Directory Structure
 
 ```
 claude-rules/
-├── base/                   # 所有项目通用（必选）
-│   ├── core.md             # 核心原则：旧代码态度、质量硬指标、命名、架构
-│   └── git.md              # Git 提交 Message 规范
+├── base/                   # Universal (required)
+│   ├── core.md             # Core principles: legacy code attitude, quality metrics, naming, architecture
+│   └── git.md              # Git commit message conventions
 │
-├── languages/              # 按语言选择
-│   ├── typescript.md       # 禁 any/enum/桶导出，as const，import type
-│   ├── javascript.md       # ES2022+，JSDoc 类型注释，ESM only
-│   ├── java.md             # Java 17+ record/sealed/pattern matching，Optional
-│   ├── kotlin.md           # 空安全、协程结构化并发、sealed class
-│   ├── swift.md            # guard let、async/await、actor、Protocol
-│   ├── python.md           # ruff、类型标注、Protocol、uv/poetry
-│   ├── html.md             # 语义化标签、可访问性、禁止 div 滥用
-│   └── css.md              # 自定义属性、Flexbox/Grid、BEM、现代特性
+├── languages/              # Pick by language
+│   ├── typescript.md       # No any/enum/barrel exports, as const, import type
+│   ├── javascript.md       # ES2022+, JSDoc type annotations, ESM only
+│   ├── java.md             # Java 17+ record/sealed/pattern matching, Optional
+│   ├── kotlin.md           # Null safety, structured concurrency, sealed class
+│   ├── swift.md            # guard let, async/await, actor, Protocol
+│   ├── python.md           # ruff, type annotations, Protocol, uv/poetry
+│   ├── html.md             # Semantic tags, accessibility, no div soup
+│   └── css.md              # Custom properties, Flexbox/Grid, BEM, modern features
 │
-└── frameworks/             # 按框架选择
-    ├── vue.md              # script setup、ref vs reactive、composable 结构
-    ├── react.md            # hooks 规则、useEffect 正确写法、状态分层
-    ├── swiftui.md          # @Observable（非旧 ObservableObject）、SwiftData
-    ├── springboot.md       # 分层架构、DTO、全局异常、构造器注入
-    └── tauri.md            # Command 设计、service 封装、安全配置
+└── frameworks/             # Pick by framework
+    ├── vue.md              # script setup, ref vs reactive, composable patterns
+    ├── react.md            # Hooks rules, correct useEffect, state layering
+    ├── swiftui.md          # @Observable (not legacy ObservableObject), SwiftData
+    ├── springboot.md       # Layered architecture, DTO, global exception handling
+    └── tauri.md            # Command design, service encapsulation, security config
 ```
 
-## 三层架构
+## Three-Layer Architecture
 
 ```
-┌─────────────────────────────────────┐
-│           base (必选)                │  core.md + git.md
-│  旧代码态度 / 质量硬指标 / 命名 / 架构  │  所有项目都适用
-├─────────────────────────────────────┤
-│         language (按需)              │  typescript.md / java.md / ...
-│  类型系统 / 命名约定 / 语言特性        │  根据项目语言选择
-├─────────────────────────────────────┤
-│        framework (按需)              │  vue.md / react.md / ...
-│  组件规范 / 状态管理 / 架构模式        │  根据项目框架选择
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│              base (required)                 │  core.md + git.md
+│  Legacy code attitude / Quality metrics /   │  Applies to all projects
+│  Naming / Architecture                      │
+├─────────────────────────────────────────────┤
+│            language (pick)                   │  typescript.md / java.md / ...
+│  Type system / Naming conventions /         │  Based on project language
+│  Language-specific features                 │
+├─────────────────────────────────────────────┤
+│            framework (pick)                  │  vue.md / react.md / ...
+│  Component standards / State management /   │  Based on project framework
+│  Architecture patterns                      │
+└─────────────────────────────────────────────┘
 ```
 
-**规则优先级**：framework > language > base（具体规则覆盖通用规则）
+**Rule priority**: framework > language > base (specific rules override general rules)
 
-## 使用方式
+## Usage
 
-将 base + 对应的 language + framework 文件内容拼接，写入项目根目录的 `CLAUDE.md` 即可。
+### Quick Start (Claude Code Skill)
 
-**示例：Vue 3 + TypeScript 项目**
+Install the skill:
 
 ```bash
-cat base/core.md base/git.md languages/typescript.md frameworks/vue.md > /path/to/your-project/CLAUDE.md
+claude install-skill https://github.com/lifedever/claude-rules/releases/download/v1.0/claude-rules-init.skill
 ```
 
-**示例：SwiftUI macOS 项目**
+Then in any project, just say:
+
+```
+init rules
+```
+
+The skill will auto-detect your tech stack, fetch the latest rules from this repo, and generate the rules file for you.
+
+### Manual Usage
+
+Concatenate the rule files you need into a single file:
 
 ```bash
-cat base/core.md base/git.md languages/swift.md frameworks/swiftui.md > /path/to/your-project/CLAUDE.md
+# Example: Vue 3 + TypeScript project
+cat base/core.md base/git.md languages/typescript.md frameworks/vue.md > CLAUDE.md
 ```
 
-**示例：Spring Boot + Kotlin 项目**
+The rules are plain Markdown and work with any AI coding tool. Just place the output where your tool expects:
 
-```bash
-cat base/core.md base/git.md languages/kotlin.md frameworks/springboot.md > /path/to/your-project/CLAUDE.md
-```
+| Tool | Target File |
+|------|-------------|
+| Claude Code | `CLAUDE.md` |
+| Cursor | `.cursorrules` or `.cursor/rules/*.mdc` |
+| Windsurf | `.windsurfrules` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
 
-## 规范设计原则
+## Design Principles
 
-1. **可执行**：每条规则 AI 能直接执行，不含模糊表述
-2. **有示例**：关键规则都有"禁止"和"正确"的代码对比
-3. **有量化**：函数 ≤30 行、文件 ≤300 行、嵌套 ≤3 层、参数 ≤4 个
-4. **不过时**：使用各语言/框架的现代 API（@Observable、record、as const 等）
-5. **不空洞**：不写"正确处理错误"，而是写具体怎么处理
+1. **Actionable** — Every rule is directly executable by AI, no vague wording
+2. **Exemplified** — Key rules include "Bad" and "Good" code comparisons
+3. **Quantified** — Functions ≤30 lines, files ≤300 lines, nesting ≤3 levels, parameters ≤4
+4. **Up-to-date** — Uses modern APIs for each language/framework (@Observable, record, as const, etc.)
+5. **Not hollow** — Instead of "handle errors properly", specifies exactly how to handle them
 
-## 贡献
+## Contributing
 
-欢迎提交新的 language 或 framework 规范。请遵循：
+PRs for new languages or frameworks are welcome. Please follow these guidelines:
 
-- 规则必须具体可执行，禁止"使用适当的/正确的"这类表述
-- 关键规则附带代码示例（禁止写法 + 正确写法）
-- 推荐该语言/框架的现代写法，不要写已过时的 API
+- Rules must be concrete and actionable — no "use appropriate/proper" phrasing
+- Key rules should include code examples (bad practice + good practice)
+- Recommend modern idioms — don't document outdated APIs
+- Write in English
 
-## 参考
+## References
 
-- [flyeric0212/cursor-rules](https://github.com/flyeric0212/cursor-rules) — Cursor IDE 规则模板库
+- [flyeric0212/cursor-rules](https://github.com/flyeric0212/cursor-rules) — Cursor IDE rules template library
 
 ## License
 

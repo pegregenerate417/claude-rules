@@ -1,58 +1,58 @@
-# 核心开发原则
+# Core Development Principles
 
-## 对待旧代码的态度
+## Attitude Toward Legacy Code
 
-这是最重要的一条规则：**不要模仿项目中已有代码的风格和模式。** 始终以本规范为准。
+This is the most important rule: **Do not mimic the style and patterns of existing code in the project.** Always follow this specification.
 
-- 修改旧代码时，按本规范重构触及到的部分，不要为了"风格一致"而沿用旧的坏习惯
-- 如果旧代码存在明显的设计问题（God Class、深层嵌套、硬编码、过度耦合），在修改时顺手修正
-- 不要害怕改变旧代码的结构，只要保证行为不变
-- 如果重构范围过大（超过 3 个文件的连锁改动），先说明方案再动手
+- When modifying old code, refactor the parts you touch according to this specification. Do not perpetuate bad habits for the sake of "consistency"
+- If old code has obvious design problems (God Class, deep nesting, hardcoding, excessive coupling), fix them while making changes
+- Do not be afraid to change the structure of old code, as long as behavior remains unchanged
+- If the refactoring scope is too large (cascading changes across more than 3 files), explain the plan before proceeding
 
-## 代码质量硬性要求
+## Hard Requirements for Code Quality
 
-- 单个函数不超过 30 行（不含空行和注释），超过必须拆分
-- 单个文件不超过 300 行，超过必须按职责拆分
-- 嵌套层级不超过 3 层（if/for/callback），超过用提前返回、提取函数等方式降低
-- 函数参数不超过 4 个，超过用对象参数
-- 禁止注释掉的代码残留，删除不用的代码而不是注释
-- 禁止魔法数字和魔法字符串，提取为命名常量
+- A single function must not exceed 30 lines (excluding blank lines and comments); split if it does
+- A single file must not exceed 300 lines; split by responsibility if it does
+- Nesting depth must not exceed 3 levels (if/for/callback); reduce with early returns, extracted functions, etc.
+- Function parameters must not exceed 4; use an object parameter if more are needed
+- No commented-out code allowed; delete unused code instead of commenting it out
+- No magic numbers or magic strings; extract them into named constants
 
-## 命名
+## Naming
 
-- 命名必须语义化，读名字就能理解用途
-- 禁止无意义命名：`data1`、`temp`、`info`、`obj`、`result`、`item`（循环变量除外）
-- 布尔值用 `is`/`has`/`can`/`should` 前缀：`isLoading`、`hasPermission`
-- 函数名以动词开头：`fetchUser`、`validateInput`、`calculateTotal`
-- 常量全大写下划线：`MAX_RETRY_COUNT`、`API_BASE_URL`
-- 事件处理函数用 `handle` 前缀：`handleClick`、`handleSubmit`
+- Names must be semantic; the purpose should be clear from the name alone
+- No meaningless names: `data1`, `temp`, `info`, `obj`, `result`, `item` (except loop variables)
+- Boolean values use `is`/`has`/`can`/`should` prefixes: `isLoading`, `hasPermission`
+- Function names start with a verb: `fetchUser`, `validateInput`, `calculateTotal`
+- Constants in ALL_CAPS_SNAKE_CASE: `MAX_RETRY_COUNT`, `API_BASE_URL`
+- Event handler functions use `handle` prefix: `handleClick`, `handleSubmit`
 
-## 架构原则
+## Architecture Principles
 
-- **单一职责**：一个函数做一件事，一个文件管一个领域
-- **关注点分离**：UI 不包含业务逻辑，业务逻辑不包含 UI 代码，数据访问独立成层
-- **依赖方向单一**：上层依赖下层，下层不反向依赖上层。UI → 业务逻辑 → 数据层
-- **面向接口**：模块之间通过接口/协议通信，不直接依赖具体实现
-- **组合优于继承**：除非有明确的 is-a 关系，否则用组合
+- **Single Responsibility**: One function does one thing, one file owns one domain
+- **Separation of Concerns**: UI contains no business logic, business logic contains no UI code, data access is a separate layer
+- **Unidirectional Dependencies**: Upper layers depend on lower layers, never the reverse. UI -> Business Logic -> Data Layer
+- **Program to Interfaces**: Modules communicate through interfaces/protocols, not concrete implementations
+- **Composition Over Inheritance**: Use composition unless there is a clear is-a relationship
 
-## 错误处理
+## Error Handling
 
-- 只在系统边界做防御性校验（用户输入、外部 API 响应、文件读写）
-- 内部函数之间的调用信任参数类型，不做冗余校验
-- 错误信息要对人友好，包含上下文（哪个操作失败了、传入了什么值）
-- 异步操作必须有错误处理，禁止裸 Promise 或裸 async 不 catch
-- 不要用 try-catch 包裹整个函数体，只包裹可能失败的具体操作
+- Perform defensive validation only at system boundaries (user input, external API responses, file I/O)
+- Internal function calls trust parameter types; no redundant validation
+- Error messages should be human-friendly and include context (which operation failed, what values were passed)
+- Async operations must have error handling; no bare Promises or unhandled async calls
+- Do not wrap the entire function body in try-catch; only wrap the specific operations that may fail
 
-## 不要过度设计
+## Avoid Over-Engineering
 
-- 只解决当前问题，不为假想的未来需求预留抽象
-- 三行重复代码优于一个过早的抽象
-- 不要为只用一次的逻辑创建工具函数
-- 不要加无用的中间层、包装器、适配器
-- 配置和选项只在确实需要灵活性时才加
+- Solve only the current problem; do not add abstractions for hypothetical future requirements
+- Three lines of duplicated code are better than a premature abstraction
+- Do not create utility functions for logic that is used only once
+- Do not add unnecessary intermediate layers, wrappers, or adapters
+- Add configuration and options only when flexibility is genuinely needed
 
-## 输出要求
+## Output Requirements
 
-- 始终使用中文回复，技术专有名词保留英文（API、Promise、Composable 等）
-- 直奔主题，不要寒暄和铺垫
-- 只输出对当前任务有直接帮助的信息，不要重复用户说过的话
+- Always respond in English
+- Get straight to the point; no pleasantries or preamble
+- Only output information directly relevant to the current task; do not repeat what the user has already said

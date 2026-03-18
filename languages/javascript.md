@@ -1,18 +1,18 @@
-# JavaScript 规范
+# JavaScript Guidelines
 
-> 如果项目支持 TypeScript，应优先使用 TypeScript，参考 typescript.md。本规范用于纯 JS 项目或 JS/TS 混合项目中的 JS 文件。
+> If the project supports TypeScript, prefer TypeScript -- see typescript.md. These guidelines apply to pure JS projects or JS files within JS/TS hybrid projects.
 
-## 基本原则
+## Core Principles
 
-- 使用 ES2022+ 语法，禁止 `var`（用 `const` 优先，必要时 `let`）
-- 禁止 `==` 和 `!=`，只用 `===` 和 `!==`
-- 用可选链 `?.` 和空值合并 `??` 替代手动判空
-- 用 JSDoc 为公共函数添加类型注释
+- Use ES2022+ syntax; no `var` (prefer `const`, use `let` only when necessary)
+- No `==` or `!=`; always use `===` and `!==`
+- Use optional chaining `?.` and nullish coalescing `??` instead of manual null checks
+- Add type annotations via JSDoc for all public functions
 
-## 模块
+## Modules
 
-- 只用 ES Module（`import`/`export`），禁止 `require`/`module.exports`
-- 命名导出优先，默认导出仅限一个文件一个主导出
+- Use ES Modules (`import`/`export`) only; no `require`/`module.exports`
+- Prefer named exports; default exports are reserved for one main export per file
 
 ```javascript
 // 禁止
@@ -24,12 +24,12 @@ import { formatDate } from './utils.js'
 export function processData(data) { ... }
 ```
 
-## 函数
+## Functions
 
-- 优先箭头函数，需要 `this` 绑定或函数提升时才用 `function`
-- 优先 `async/await`，禁止 `.then()` 链超过 2 层
-- 用解构取参数和返回值
-- 用默认参数替代内部判空
+- Prefer arrow functions; use `function` only when `this` binding or hoisting is needed
+- Prefer `async/await`; do not chain more than 2 levels of `.then()`
+- Use destructuring for parameters and return values
+- Use default parameters instead of internal null checks
 
 ```javascript
 // 禁止
@@ -45,16 +45,16 @@ const createUser = ({ name = 'Unknown', age = 0 } = {}) => {
 }
 ```
 
-## 数组和对象
+## Arrays and Objects
 
-- 用展开运算符拷贝和合并：`[...arr]`、`{ ...obj }`
-- 用解构赋值：`const { name, age } = user`
-- 数组操作优先用 `map`、`filter`、`reduce`，不要用 `for` 循环加 `push`
-- 禁止直接修改函数参数对象
+- Use the spread operator for copying and merging: `[...arr]`, `{ ...obj }`
+- Use destructuring assignment: `const { name, age } = user`
+- Prefer `map`, `filter`, `reduce` for array operations; avoid `for` loops with `push`
+- Do not mutate function parameter objects directly
 
-## JSDoc 类型注释
+## JSDoc Type Annotations
 
-纯 JS 项目必须用 JSDoc 标注公共 API：
+Pure JS projects must annotate public APIs with JSDoc:
 
 ```javascript
 /**
@@ -67,8 +67,8 @@ export async function fetchUser(id) { ... }
 /** @typedef {{ name: string, age: number }} UserProfile */
 ```
 
-## 错误处理
+## Error Handling
 
-- 异步操作必须 try-catch 或 `.catch()`
-- 错误信息包含上下文
-- 禁止空 catch 块
+- Async operations must use try-catch or `.catch()`
+- Error messages must include context
+- No empty catch blocks

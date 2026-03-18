@@ -1,11 +1,11 @@
-# HTML 规范
+# HTML Guidelines
 
-## 语义化
+## Semantic Markup
 
-- 用语义标签表达结构，禁止全篇 `<div>` 套 `<div>`
-- 页面骨架：`<header>`、`<nav>`、`<main>`、`<aside>`、`<footer>`
-- 内容区块：`<section>`（有标题的分组）、`<article>`（独立内容）
-- 交互元素：按钮用 `<button>`，不要用 `<div onclick>`；链接用 `<a>`
+- Use semantic tags to convey structure; no wrapping everything in `<div>` inside `<div>`
+- Page skeleton: `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`
+- Content sections: `<section>` (grouped content with a heading), `<article>` (self-contained content)
+- Interactive elements: use `<button>` for buttons, not `<div onclick>`; use `<a>` for links
 
 ```html
 <!-- 禁止 -->
@@ -23,12 +23,12 @@
 </header>
 ```
 
-## 可访问性（a11y）
+## Accessibility (a11y)
 
-- 图片必须有 `alt` 属性，装饰性图片用 `alt=""`
-- 表单控件必须关联 `<label>`（用 `for` 属性或嵌套）
-- 交互元素必须可键盘操作（`tabindex`、`role`）
-- 用 `aria-label` 为无文字的按钮提供说明
+- Images must have an `alt` attribute; decorative images use `alt=""`
+- Form controls must be associated with a `<label>` (via `for` attribute or nesting)
+- Interactive elements must be keyboard-operable (`tabindex`, `role`)
+- Use `aria-label` to describe buttons that have no visible text
 
 ```html
 <!-- 禁止 -->
@@ -41,14 +41,14 @@
 <input id="username" type="text" placeholder="请输入用户名">
 ```
 
-## 结构规则
+## Structural Rules
 
-- 一个页面只有一个 `<h1>`，标题层级不跳级（h1 → h2 → h3）
-- 列表内容用 `<ul>`/`<ol>` + `<li>`，不要用 div 模拟
-- 表格数据用 `<table>` + `<thead>`/`<tbody>`，不要用 div 网格模拟表格
-- 自闭合标签不加斜杠：`<img>` `<input>` `<br>`（HTML5 风格）
+- Only one `<h1>` per page; heading levels must not skip (h1 -> h2 -> h3)
+- Use `<ul>`/`<ol>` + `<li>` for lists; do not simulate lists with divs
+- Use `<table>` + `<thead>`/`<tbody>` for tabular data; do not simulate tables with div grids
+- No trailing slash on void elements: `<img>` `<input>` `<br>` (HTML5 style)
 
-## 属性顺序（推荐）
+## Attribute Order (Recommended)
 
 ```html
 <element
@@ -61,9 +61,9 @@
 >
 ```
 
-## 禁止的写法
+## Prohibited Patterns
 
-- 禁止内联 `style` 属性（除非动态计算值）
-- 禁止内联 `onclick`/`onchange` 等事件（用 JS 绑定）
-- 禁止用 `<br>` 做间距（用 CSS margin/padding）
-- 禁止用 `<table>` 做页面布局
+- No inline `style` attributes (unless the value is dynamically computed)
+- No inline event handlers like `onclick`/`onchange` (bind events in JS)
+- No `<br>` for spacing (use CSS margin/padding)
+- No `<table>` for page layout
