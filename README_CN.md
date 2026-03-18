@@ -1,5 +1,10 @@
 # Claude Rules
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/lifedever/claude-rules)](https://github.com/lifedever/claude-rules/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/lifedever/claude-rules/pulls)
+[![Website](https://img.shields.io/badge/Website-claude--rules-orange)](https://lifedever.github.io/claude-rules/)
+
 [English](README.md) | 中文
 
 面向 AI 编码助手的编码规范模板库。通过 **base + language + framework** 三层组合，为项目生成针对性的规则文件，让 AI 写出符合规范的代码。

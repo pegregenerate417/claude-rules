@@ -1,5 +1,10 @@
 # Claude Rules
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/lifedever/claude-rules)](https://github.com/lifedever/claude-rules/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/lifedever/claude-rules/pulls)
+[![Website](https://img.shields.io/badge/Website-claude--rules-orange)](https://lifedever.github.io/claude-rules/)
+
 English | [中文](README_CN.md)
 
 Coding standards template library for AI coding assistants. Combine **base + language + framework** layers to generate a project-specific rules file that keeps AI-generated code clean and consistent.
