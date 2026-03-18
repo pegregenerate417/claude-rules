@@ -140,9 +140,57 @@ a:hover { text-decoration: underline; }
   min-height: 100vh;
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 6rem 2rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -40%; right: -20%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--accent-bg) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -30%; left: -15%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, var(--blue-bg) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.hero-inner { max-width: 720px; }
+.hero-inner { max-width: 720px; width: 100%; position: relative; z-index: 1; }
+
+/* Terminal mockup */
+.terminal {
+  max-width: 540px; margin: 2.5rem auto 0;
+  border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  text-align: left;
+}
+.terminal-bar {
+  background: var(--bg-alt); padding: 0.5rem 0.8rem;
+  display: flex; align-items: center; gap: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+.terminal-dot:nth-child(1) { background: #f87171; }
+.terminal-dot:nth-child(2) { background: #fbbf24; }
+.terminal-dot:nth-child(3) { background: #4ade80; }
+.terminal-title {
+  flex: 1; text-align: center; font-size: 0.7rem;
+  color: var(--text-3); font-family: var(--mono);
+  margin-right: 36px;
+}
+.terminal-body {
+  background: #1e1e2e; padding: 1rem 1.2rem;
+  font-family: var(--mono); font-size: 0.78rem;
+  line-height: 1.8; color: #cdd6f4;
+}
+.terminal-body .prompt { color: #a6e3a1; }
+.terminal-body .output { color: #89b4fa; }
+.terminal-body .dim { color: #6c7086; }
 
 .hero h1 {
   font-size: clamp(2.8rem, 7vw, 5rem);
@@ -194,7 +242,7 @@ a:hover { text-decoration: underline; }
 .section-head p { font-size: 1.05rem; color: var(--text-2); max-width: 560px; }
 
 /* --- Cards grid --- */
-.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.cards { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; }
 
 .card {
   padding: 1.5rem; border-radius: var(--radius);
@@ -202,7 +250,16 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow); transition: all 0.25s;
 }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.card .icon { font-size: 1.3rem; margin-bottom: 0.8rem; }
+.card .icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+}
+.card .icon svg { width: 20px; height: 20px; }
+.card:nth-child(1) .icon { background: var(--red-bg); color: var(--red); }
+.card:nth-child(2) .icon { background: var(--accent-bg); color: var(--accent); }
+.card:nth-child(3) .icon { background: var(--blue-bg); color: var(--blue); }
+.card:nth-child(4) .icon { background: var(--green-bg); color: var(--green); }
 .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
 .card p { font-size: 0.9rem; color: var(--text-2); }
 
@@ -379,6 +436,21 @@ a:hover { text-decoration: underline; }
       </a>
       <a href="#install" class="btn btn-outline" data-i18n="hero.cta"></a>
     </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">claude &mdash; ~/my-project</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">&#10095;</span> /init-rules<br>
+        <span class="dim">Detected:</span> <span class="output">TypeScript</span> + <span class="output">Vue 3</span><br>
+        <span class="dim">Include:</span> base/core.md, base/git.md, languages/typescript.md, frameworks/vue.md<br>
+        <span class="dim">Writing:</span> CLAUDE.md <span class="output">(253 lines)</span> <span style="color:#a6e3a1">&#10003;</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -428,10 +500,10 @@ a:hover { text-decoration: underline; }
       <p data-i18n="problem.desc"></p>
     </div>
     <div class="cards">
-      <div class="card"><div class="icon">&#128163;</div><h3 data-i18n="problem.c1.t"></h3><p data-i18n="problem.c1.d"></p></div>
-      <div class="card"><div class="icon">&#128165;</div><h3 data-i18n="problem.c2.t"></h3><p data-i18n="problem.c2.d"></p></div>
-      <div class="card"><div class="icon">&#128296;</div><h3 data-i18n="problem.c3.t"></h3><p data-i18n="problem.c3.d"></p></div>
-      <div class="card"><div class="icon">&#9888;&#65039;</div><h3 data-i18n="problem.c4.t"></h3><p data-i18n="problem.c4.d"></p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><h3 data-i18n="problem.c1.t"></h3><p data-i18n="problem.c1.d"></p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3 data-i18n="problem.c2.t"></h3><p data-i18n="problem.c2.d"></p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg></div><h3 data-i18n="problem.c3.t"></h3><p data-i18n="problem.c3.d"></p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3 data-i18n="problem.c4.t"></h3><p data-i18n="problem.c4.d"></p></div>
     </div>
   </div>
 </div>
