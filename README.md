@@ -62,22 +62,24 @@ claude-rules/
 
 ### Claude Code Plugin (Recommended)
 
-**Step 1: Add the marketplace**
+#### Install
 
 ```bash
+# Step 1: Add the marketplace
 claude plugin marketplace add lifedever/claude-rules
-```
 
-**Step 2: Install the plugin**
-
-```bash
+# Step 2: Install the plugin
 claude plugin install init-claude-rules@claude-rules
+
+# Step 3: Restart Claude Code
 ```
 
-**Step 3: Restart Claude Code**, then open any project and run:
+#### Use
+
+Open any project in Claude Code and run:
 
 ```
-/init-claude-rules:init-rules
+/init-rules
 ```
 
 The plugin will:
@@ -86,10 +88,21 @@ The plugin will:
 3. Read the matching rule files from the plugin
 4. Generate `CLAUDE.md` in your project root
 
-**Update rules** when new rules are added upstream:
+#### Update
+
+When new rules are added upstream, update the local cache:
 
 ```bash
 claude plugin marketplace update claude-rules
+```
+
+Then restart Claude Code. The next time you run `/init-rules`, it will use the latest rules.
+
+#### Uninstall
+
+```bash
+claude plugin uninstall init-claude-rules@claude-rules
+claude plugin marketplace remove claude-rules
 ```
 
 ### Manual Usage

@@ -59,22 +59,24 @@ claude-rules/
 
 ### Claude Code 插件（推荐）
 
-**第 1 步：添加 marketplace**
+#### 安装
 
 ```bash
+# 第 1 步：添加 marketplace
 claude plugin marketplace add lifedever/claude-rules
-```
 
-**第 2 步：安装插件**
-
-```bash
+# 第 2 步：安装插件
 claude plugin install init-claude-rules@claude-rules
+
+# 第 3 步：重启 Claude Code
 ```
 
-**第 3 步：重启 Claude Code**，然后在任意项目中运行：
+#### 使用
+
+在任意项目中打开 Claude Code，运行：
 
 ```
-/init-claude-rules:init-rules
+/init-rules
 ```
 
 插件会：
@@ -83,10 +85,21 @@ claude plugin install init-claude-rules@claude-rules
 3. 从插件本地文件读取对应规范
 4. 在项目根目录生成 `CLAUDE.md`
 
-**更新规范**（上游有新规则时）：
+#### 更新
+
+上游有新规则时，更新本地缓存：
 
 ```bash
 claude plugin marketplace update claude-rules
+```
+
+然后重启 Claude Code，下次运行 `/init-rules` 即可使用最新规范。
+
+#### 卸载
+
+```bash
+claude plugin uninstall init-claude-rules@claude-rules
+claude plugin marketplace remove claude-rules
 ```
 
 ### 手动使用
