@@ -57,24 +57,33 @@ claude-rules/
 
 ## 使用方式
 
-### 快速开始（Claude Code 插件）
+### Claude Code 插件（推荐）
 
-添加 marketplace 并安装插件：
+**第 1 步：添加 marketplace**
 
 ```bash
 claude plugin marketplace add lifedever/claude-rules
+```
+
+**第 2 步：安装插件**
+
+```bash
 claude plugin install claude-rules-init@claude-rules
 ```
 
-然后在任意项目里说：
+**第 3 步：重启 Claude Code**，然后在任意项目中运行：
 
 ```
-init rules
+/init-claude-rules
 ```
 
-插件会自动检测技术栈，从本仓库拉取最新规范，生成 `CLAUDE.md`。
+插件会：
+1. 自动检测项目技术栈（TypeScript、Vue、React 等）
+2. 让你确认检测结果
+3. 从插件本地文件读取对应规范
+4. 在项目根目录生成 `CLAUDE.md`
 
-更新规范时：
+**更新规范**（上游有新规则时）：
 
 ```bash
 claude plugin marketplace update claude-rules

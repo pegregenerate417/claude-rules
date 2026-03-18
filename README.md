@@ -60,24 +60,33 @@ claude-rules/
 
 ## Usage
 
-### Quick Start (Claude Code Plugin)
+### Claude Code Plugin (Recommended)
 
-Add the marketplace and install the plugin:
+**Step 1: Add the marketplace**
 
 ```bash
 claude plugin marketplace add lifedever/claude-rules
+```
+
+**Step 2: Install the plugin**
+
+```bash
 claude plugin install claude-rules-init@claude-rules
 ```
 
-Then in any project, just say:
+**Step 3: Restart Claude Code**, then open any project and run:
 
 ```
-init rules
+/init-claude-rules
 ```
 
-The plugin will auto-detect your tech stack, fetch the latest rules from this repo, and generate `CLAUDE.md` for you.
+The plugin will:
+1. Auto-detect your project's tech stack (TypeScript, Vue, React, etc.)
+2. Ask you to confirm the detected stack
+3. Read the matching rule files from the plugin
+4. Generate `CLAUDE.md` in your project root
 
-To update rules in the future:
+**Update rules** when new rules are added upstream:
 
 ```bash
 claude plugin marketplace update claude-rules
@@ -85,11 +94,14 @@ claude plugin marketplace update claude-rules
 
 ### Manual Usage
 
-Concatenate the rule files you need into a single file:
+Clone this repo and concatenate the rule files you need:
 
 ```bash
+git clone https://github.com/lifedever/claude-rules.git
+cd claude-rules
+
 # Example: Vue 3 + TypeScript project
-cat base/core.md base/git.md languages/typescript.md frameworks/vue.md > CLAUDE.md
+cat base/core.md base/git.md languages/typescript.md frameworks/vue.md > /path/to/project/CLAUDE.md
 ```
 
 The rules are plain Markdown and work with any AI coding tool. Just place the output where your tool expects:
