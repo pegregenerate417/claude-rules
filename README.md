@@ -96,7 +96,7 @@ When new rules are added upstream, update the local cache:
 claude plugin marketplace update claude-rules
 ```
 
-Then restart Claude Code. The next time you run `/init-rules`, it will use the latest rules.
+Then restart Claude Code. To apply updated rules to a project that already has `CLAUDE.md`, run `/init-rules` again — the plugin will ask before overwriting.
 
 #### Uninstall
 

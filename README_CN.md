@@ -93,7 +93,7 @@ claude plugin install init-claude-rules@claude-rules
 claude plugin marketplace update claude-rules
 ```
 
-然后重启 Claude Code，下次运行 `/init-rules` 即可使用最新规范。
+然后重启 Claude Code。对已有 `CLAUDE.md` 的项目，再次运行 `/init-rules` 即可更新，插件会在覆盖前询问确认。
 
 #### 卸载
 
