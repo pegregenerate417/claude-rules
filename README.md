@@ -77,7 +77,7 @@ claude plugin install init-claude-rules@claude-rules
 **Step 3: Restart Claude Code**, then open any project and run:
 
 ```
-/init-claude-rules:init
+/init-claude-rules:init-rules
 ```
 
 The plugin will:
